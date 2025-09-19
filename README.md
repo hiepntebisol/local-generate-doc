@@ -67,4 +67,4 @@ yq --version
 
 ---
 
-## 📄 License by Thanh
+## 📄 License by Thanh Hiep
