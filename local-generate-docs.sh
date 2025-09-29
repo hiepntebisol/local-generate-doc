@@ -6,7 +6,19 @@ set -euo pipefail
 # ---------------------------
 
 USER_AGENT="Japanticket-api-request-bot"
-CONFIG_URL="http://localhost:8082/v3/api-docs/swagger-config"
+
+echo "🌐 Choose environment:"
+echo "1) Local (http://localhost:8082)"
+echo "2) Dev   (https://api.dev.japanticket.com)"
+read -rp "Enter number [1-2]: " choice
+
+case "$choice" in
+  1) BASE_URL="http://localhost:8082" ;;
+  2) BASE_URL="https://api.dev.japanticket.com" ;;
+  *) echo "❌ Invalid choice"; exit 1 ;;
+esac
+
+CONFIG_URL="$BASE_URL/v3/api-docs/swagger-config"
 
 echo "📡 Fetching swagger-config from $CONFIG_URL ..."
 CONFIG_JSON=$(curl -sSf -H "user-agent: $USER_AGENT" "$CONFIG_URL")
@@ -60,7 +72,7 @@ for choice in "${SELECTED[@]}"; do
     OUTPUT_JSON="${BASE_NAME}.json"
     OUTPUT_YAML="${BASE_NAME}.yaml"
 
-    API_URL="http://localhost:8082/v3/api-docs/${GROUP}"
+    API_URL="$BASE_URL/v3/api-docs/${GROUP}"
     echo "📥 Downloading API JSON from $API_URL ..."
     curl -sSf -o "$OUTPUT_JSON" "$API_URL" -H "user-agent: $USER_AGENT"
 
